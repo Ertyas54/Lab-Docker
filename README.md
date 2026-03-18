@@ -5,10 +5,7 @@
 
 # Технологии
 
-Python/Flask
-PostgreSQL
-Docker/Docker Compose
-Nginx
+Python/Flask, PostgreSQL, Docker/Docker Compose, Nginx
 
 # Запуск
 
