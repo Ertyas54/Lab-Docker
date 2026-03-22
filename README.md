@@ -5,7 +5,10 @@
 
 # Технологии
 
-Python/Flask, PostgreSQL, Docker/Docker Compose, Nginx
+- Python/Flask
+- PostgreSQL
+- Docker/Docker Compose
+- Nginx
 
 # Запуск
 
@@ -14,13 +17,13 @@ docker-compose up -d --build
 # Проверка
 
 ## Проверка здоровья
-curl http://localhost:5000/health
+curl http://localhost/health
 
 ## Получение всех задач
-curl http://localhost:5000/api/tasks
+curl http://localhost/api/tasks
 
 ## Получение задачи по ID
-curl http://localhost:5000/api/tasks/1
+curl http://localhost/api/tasks/1
 
 # POST/PUT/DELETE запросы
 
@@ -31,7 +34,7 @@ $task = @{
     description = "Описание задачи"
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri http://localhost:5000/api/tasks `
+Invoke-RestMethod -Uri http://localhost/api/tasks `
   -Method POST `
   -Body $task `
   -ContentType "application/json"
@@ -41,11 +44,11 @@ $update = @{
     status = "completed"
 } | ConvertTo-Json
 
-Invoke-RestMethod -Uri http://localhost:5000/api/tasks/1 `
+Invoke-RestMethod -Uri http://localhost/api/tasks/1 `
   -Method PUT `
   -Body $update `
   -ContentType "application/json"
 
 ## Удаление задачи
-Invoke-RestMethod -Uri http://localhost:5000/api/tasks/2 `
+Invoke-RestMethod -Uri http://localhost/api/tasks/2 `
   -Method DELETE
