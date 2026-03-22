@@ -3,8 +3,8 @@ services:
     build: ./db
     container_name: todo-db
     environment:
-      POSTGRES_DB: todo_db
-      POSTGRES_USER: postgres
+      POSTGRES_DB: ${DB_NAME:-todo_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -12,7 +12,7 @@ services:
       - todo-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-todo_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -20,10 +20,9 @@ services:
   app:
     build: ./app
     container_name: todo-app
-    ports:
-      - "5000:5000"
     environment:
-      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-postgres}@db:5432/todo_db
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@${DB_HOST:-db}:${DB_PORT:-5432}/${DB_NAME:-todo_db}
+      FLASK_ENV: ${FLASK_ENV:-production}
     depends_on:
       db:
         condition: service_healthy
