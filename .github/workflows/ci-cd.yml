@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          cd app/src
+          pip install -r requirements.txt
+          pip install flake8 pytest pytest-cov
+
+      - name: Lint
+        run: |
+          cd app/src
+          flake8 . --max-line-length=120 --count --statistics
+
+      - name: Test with coverage
+        run: |
+          cd app/src
+          python -m pytest tests/ -v --cov=. --cov-fail-under=50
+
+      - name: Docker build
+        run: |
+          cd app
+          docker build -t todo-list-api:${{ github.sha }} .
+
+      - name: Docker push
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag todo-list-api:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/todo-list-api:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/todo-list-api:latest

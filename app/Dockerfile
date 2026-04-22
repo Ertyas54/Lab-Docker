@@ -9,6 +9,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY src/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+ARG INSTALL_DEV=false
+RUN if [ "$INSTALL_DEV" = "true" ]; then \
+        pip install --no-cache-dir pytest pytest-cov flake8; \
+    fi
+
 COPY src/ .
 
 RUN addgroup --system --gid 1001 app && \
