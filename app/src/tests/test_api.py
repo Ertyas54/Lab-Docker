@@ -4,6 +4,8 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+os.environ['DATABASE_URL'] = 'sqlite:///:memory:'
+
 from app import create_app
 from models import db as _db
 
