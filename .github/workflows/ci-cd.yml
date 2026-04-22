@@ -27,7 +27,7 @@ jobs:
       - name: Lint
         run: |
           cd app/src
-          flake8 . --max-line-length=120 --count --statistics || true
+          flake8 . --max-line-length=120 --count --statistics
 
       - name: Test with coverage
         run: |
