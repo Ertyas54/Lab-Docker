@@ -4,17 +4,14 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-os.environ['DATABASE_URL'] = 'sqlite:///:memory:'
-
-from app import create_app
+from config import TestConfig
 from models import db as _db
 
 
 @pytest.fixture
 def app():
-    app = create_app()
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    from __init__ import create_app
+    app = create_app(TestConfig)
 
     with app.app_context():
         _db.create_all()
