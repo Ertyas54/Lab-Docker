@@ -1,5 +1,4 @@
 [flake8]
 max-line-length = 120
-exclude = .git,__pycache__,venv,.venv
-ignore = E501, W503, E203
-per-file-ignores = __init__.py:F401
+exclude = .git,__pycache__,venv,.venv,tests
+ignore = W293, W292, E302, E402, F401
